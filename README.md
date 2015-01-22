@@ -15,7 +15,7 @@ Don't.
 
 The following routing libraries have a ronda-compatible `RouteDescriptor` implementation:
 
-- [bidi](https://github.com/xsc/ronda/tree/master/ronda-routing-bidi)
+- __bidi__: [ronda-routing-bidi](https://github.com/xsc/ronda-routing-bidi)
 
 ## License
 
