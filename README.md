@@ -4,6 +4,7 @@ __ronda-routing__ is part of the [ronda](https://github.com/xsc/ronda) library a
 a middleware-based approach to routing, allowing you to decouple your routing logic from your
 handlers.
 
+[![Build Status](https://travis-ci.org/xsc/ronda-routing.svg?branch=master)](https://travis-ci.org/xsc/ronda-routing)
 [![endorse](https://api.coderwall.com/xsc/endorsecount.png)](https://coderwall.com/xsc)
 
 ## Usage
