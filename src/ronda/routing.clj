@@ -1,6 +1,6 @@
 (ns ronda.routing
   (:require [potemkin :refer [import-vars]]
-            [ronda.routing middleware request]))
+            [ronda.routing middleware prefix request]))
 
 ;; ## User-Facing API
 ;;
@@ -12,6 +12,8 @@
    wrap-endpoints
    wrap-endpoint
    compile-endpoints]
+  [ronda.routing.prefix
+   prefix]
   [ronda.routing.request
    endpoint
    to
