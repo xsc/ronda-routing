@@ -13,10 +13,18 @@
      the route ID is unknown), returns a map of `:path`, `:route-params`
      (the values used as route params) and `:query-params`.
      Might throw an exception if the values do not match an expected schema.")
+  (prefix-string [_ prefix]
+    "Return a new RouteDescriptor representing all routes prefixed with
+     the given constant string.")
+  (prefix-route-param [_ route-param pattern]
+    "Return a new RouteDescriptor representing all routes prefixed with
+     a string matching the given pattern (if non-nil). When matching a URI
+     against the new descriptor, the value of said string will be bound to
+     the given key in `:route-params`.")
   (routes [_]
-    "Return a map associating route IDs with their full path value,
-     adhering to bidi's BNF. If `nil` is returned, no information
-     can be gathered from this descriptor."))
+    "Return a map associating route IDs with a map of `:path` (the full
+     path to the endpoint using bidi's route format) and `:methods`
+     (the set of request methods applicable for the endpoint)."))
 
 (extend-protocol RouteDescriptor
   Object
@@ -42,28 +50,3 @@
   [descriptor {:keys [request-method uri]}]
   (match descriptor request-method uri))
 
-;; ## Descriptor Wrappers
-
-(defn prefix-descriptor
-  "Create RouteDescriptor that matches/generates routes with the given
-   URI prefix."
-  [descriptor ^String prefix]
-  {:pre [(string? prefix)]}
-  (let [prefix-count (count prefix)]
-    (reify RouteDescriptor
-      (match [_ request-method uri]
-        (if (.startsWith ^String uri prefix)
-          (match descriptor request-method (subs uri prefix-count))))
-      (generate [_ route-id values]
-        (if-let [r (generate descriptor route-id values)]
-          (update-in r [:path] #(str prefix %))))
-      (routes [_]
-        (->> (for [[id spec] (routes descriptor)]
-               (->> (if (sequential? spec)
-                      (vec
-                        (if (string? (first spec))
-                          (cons (str prefix (first spec)) (rest spec))
-                          (cons prefix spec)))
-                      [prefix spec])
-                    (vector id)))
-             (into {}))))))

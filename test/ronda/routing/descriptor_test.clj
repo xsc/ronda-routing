@@ -17,8 +17,13 @@
         {:path (format "/%s/%s" greeting recipient)
          :route-params (select-keys params [:greeting :recipient])
          :query-params (dissoc params :greeting :recipient)}))
+    (prefix-string [this prefix]
+      (throw (Exception.)))
+    (prefix-route-param [this k pattern]
+      (throw (Exception.)))
     (routes [_]
-      {:greet ["/" :greeting "/" :recipient]})))
+      {:greet {:path ["/" :greeting "/" :recipient]
+               :methods #{:get}}})))
 
 ;; ## Tests
 
@@ -34,27 +39,3 @@
   :get    "/hello/world"    :greet   "hello"        "world"
   :post   "/hello/world"    :greet   "hello"        "world"
   :post   "/hello/you"      falsey   falsey         falsey)
-
-(let [d (prefix-descriptor test-descriptor "/app")]
-  (tabular
-    (fact "about a prefixed descriptor matching."
-          (let [r (->> {:request-method ?method
-                        :uri ?uri}
-                       (match-request d))]
-            (:id r) => ?id
-            (-> r :route-params :greeting) => ?greeting
-            (-> r :route-params :recipient) => ?recipient))
-    ?method ?uri               ?id      ?greeting      ?recipient
-    :get    "/app/hello/world" :greet   "hello"        "world"
-    :post   "/app/hello/world" :greet   "hello"        "world"
-    :post   "/hello/world"     falsey   falsey         falsey)
-  (fact "about prefixed descriptor generation."
-        (let [{:keys [path route-params]} (generate
-                                            d
-                                            :greet
-                                            {:greeting "cheerio"
-                                             :recipient "miss-sophie"})]
-          path => "/app/cheerio/miss-sophie"
-          route-params => {:greeting "cheerio", :recipient "miss-sophie"}))
-  (fact "about prefixed descriptor route lists."
-        (routes d) => {:greet ["/app/" :greeting "/" :recipient]}))
