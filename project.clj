@@ -9,7 +9,7 @@
                                   [joda-time "2.7"]]
                    :plugins [[lein-midje "3.1.3"]
                              [codox "0.8.10"]]
-                   :codox {:project {:name "ronda/routing"
-                                     :defaults {:doc/format :markdown}}}}}
+                   :codox {:project {:name "ronda/routing"}
+                           :defaults {:doc/format :markdown}}}}
   :aliases {"test" ["midje"]}
   :pedantic? :abort)
