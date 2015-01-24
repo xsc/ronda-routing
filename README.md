@@ -5,7 +5,6 @@ a middleware-based approach to routing, allowing you to decouple your routing lo
 handlers.
 
 [![Build Status](https://travis-ci.org/xsc/ronda-routing.svg?branch=master)](https://travis-ci.org/xsc/ronda-routing)
-[![endorse](https://api.coderwall.com/xsc/endorsecount.png)](https://coderwall.com/xsc)
 
 ## Usage
 
