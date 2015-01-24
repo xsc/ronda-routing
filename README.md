@@ -41,6 +41,9 @@ Routing Library | `RouteDescriptor`                       | Route Format
 [bidi][bidi]    | [ronda-routing-bidi][bidi-descriptor]   | `["/" {["article/" :id] :article}]`
 [clout][clout]  | [ronda-routing-clout][clout-descriptor] | `{:article "/article/:id"}`
 
+You can create your own by implementing the [`ronda.routing.descriptor/RouteDescriptor`][route-descriptor] protocol -
+and feel free to open a Pull Request to add it to this list!
+
 ### Middlewares
 
 __`(wrap-routing handler descriptor)`__
@@ -144,6 +147,15 @@ And, go!
 ;;     :body "next article: /articles/2"}
 ```
 
+## Contributing
+
+Contributions are very welcome.
+
+1. Clone the repository.
+2. Create a branch, make your changes.
+3. Make sure tests are passing by running `lein test`.
+4. Submit a Github pull request.
+
 ## License
 
 Copyright &copy; 2015 Yannick Scherer
@@ -156,3 +168,4 @@ your option) any later version.
 [clout]: https://github.com/weavejester/clout
 [bidi-descriptor]: https://github.com/xsc/ronda-routing-bidi
 [clout-descriptor]: https://github.com/xsc/ronda-routing-clout
+[route-descriptor]: https://xsc.github.io/ronda-routing/ronda.routing.descriptor.html#var-RouteDescriptor
