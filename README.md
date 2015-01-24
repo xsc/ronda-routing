@@ -1,8 +1,11 @@
 # ronda-routing
 
 __ronda-routing__ is part of the [ronda](https://github.com/xsc/ronda) library and offers
-a middleware-based approach to routing, allowing you to decouple your routing logic from your
-handlers.
+a middleware-based approach to routing, allowing you to do several things:
+
+- [decouple your routing logic](#middlewares) from your handlers,
+- thus, [choose the routing library](#implementations) most suited to your requirements,
+- [generate and parse references](#path-matching--generation) to other parts of your application without global state.
 
 [![Build Status](https://travis-ci.org/xsc/ronda-routing.svg?branch=master)](https://travis-ci.org/xsc/ronda-routing)
 
@@ -16,7 +19,7 @@ __Leiningen__ ([via Clojars](https://clojars.org/ronda/routing))
 
 ### Route Descriptors
 
-__Example__
+#### Example
 
 A `RouteDescriptor` is a routing-library independent representation of a series of routes. This project, however,
 does not contain any concrete implementations, so you have to explicitly include one, e.g.
@@ -31,7 +34,7 @@ does not contain any concrete implementations, so you have to explicitly include
           ["articles/" :id] :article}]))
 ```
 
-__Implementations__
+#### Implementations
 
 Routing Library | `RouteDescriptor`                       | Route Format
 ----------------|-----------------------------------------|-------------
