@@ -6,11 +6,11 @@
    pattern (if appicable). Returns the value for the requested key."
   [vs k pattern]
   {:pre [(keyword? k)]}
-  (assert (contains? vs k) (format "value missing for route param: %s" k))
+  (when (not (contains? vs k))
+    (u/throwf "value missing for route param: %s" k))
   (let [v (get vs k)]
-    (when pattern
-      (assert (re-matches pattern v)
-              (format "route param %s not compatible with pattern: %s" k pattern)))
+    (when (and pattern (not (re-matches pattern v)))
+      (u/throwf "route param %s not compatible with pattern: %s" k pattern))
     v))
 
 (defn generate-by
@@ -19,11 +19,13 @@
    whose underlying libraries do not explicitly offer path generation."
   [path values]
   (let [vs (u/stringify-vals values)]
-    (->> path
+    (->> (if (sequential? path)
+           path
+           [path])
          (map
            (fn [v]
              (cond (string? v) v
                    (keyword? v) (read-keyword vs v nil)
                    (vector? v) (read-keyword vs (second v) (first v))
-                   :else (throw (Exception. (format "not a valid path segment: %s" (pr-str v)))))))
+                   :else (u/throwf "not a valid path segment: %s" (pr-str v)))))
          (apply str))))
