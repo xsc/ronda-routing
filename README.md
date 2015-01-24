@@ -17,6 +17,8 @@ __Leiningen__ ([via Clojars](https://clojars.org/ronda/routing))
 
 ### Route Descriptors
 
+__Example__
+
 A `RouteDescriptor` is a routing-library independent representation of a series of routes. This project, however,
 does not contain any concrete implementations, so you have to explicitly include one, e.g.
 [ronda/routing-bidi][bidi-descriptor]:
@@ -30,9 +32,12 @@ does not contain any concrete implementations, so you have to explicitly include
           ["articles/" :id] :article}]))
 ```
 
-Implementations exist for:
+__Implementations__
 
-- __bidi__: [ronda-routing-bidi][bidi-descriptor]
+Routing Library | `RouteDescriptor`                       | Route Format
+----------------|-----------------------------------------|-------------
+[bidi][bidi]    | [ronda-routing-bidi][bidi-descriptor]   | `["/" {["article/" :id] :article}]`
+[clout][clout]  | [ronda-routing-clout][clout-descriptor] | `{:article "/article/:id"}`
 
 ### Middlewares
 
@@ -146,4 +151,6 @@ your option) any later version.
 
 [doc]: https://xsc.github.io/ronda-routing/
 [bidi]: https://github.com/juxt/bidi
+[clout]: https://github.com/weavejester/clout
 [bidi-descriptor]: https://github.com/xsc/ronda-routing-bidi
+[clout-descriptor]: https://github.com/xsc/ronda-routing-clout
