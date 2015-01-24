@@ -15,7 +15,7 @@
                            (clojure.string/capitalize (:recipient params))
                            (->> {:greeting "cheerio"
                                  :recipient "miss-sophie"}
-                                (rq/to request :greet)))})})
+                                (rq/href request :greet)))})})
 
 (fact "about the abstract routing middleware."
       (let [a (atom nil)

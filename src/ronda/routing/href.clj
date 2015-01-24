@@ -4,6 +4,8 @@
              [utils :as u]]
             [clojure.string :as string]))
 
+;; ## Generate
+
 (defn- generate-query-string
   [query-params]
   (->> (for [[k v] (sort-by key query-params)]
@@ -30,3 +32,32 @@
                                               route-id))]
     (->> (generate-query-string query-params)
          (join-query-string path))))
+
+;; ## Match
+
+(defn- parse-query-params
+  "Parse the given query string and produce map of keywords
+   -> strings."
+  [query-string]
+  (if query-string
+    (->> (for [s (.split ^String query-string "&")
+               :let [[k v] (->> (.split ^String s "=" 2)
+                                (map u/urldecode))]]
+           [(keyword k) v])
+         (into {}))
+    {}))
+
+(defn parse
+  "Parse the given href and produce a map of `:id`, `:path`,
+   `:route-params`, `:query-params` and `:params`."
+  [descriptor request-method href]
+  (let [[path query-string] (.split ^String href "\\?" 2)]
+    (if-let [{:keys [route-params] :as r} (describe/match
+                                            descriptor
+                                            request-method
+                                            path)]
+      (let [query-params (parse-query-params query-string)]
+        (->> {:path path
+              :query-params query-params
+              :params (merge route-params query-params)}
+             (merge r))))))

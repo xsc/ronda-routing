@@ -55,11 +55,23 @@
      RouteDescriptor stored in the given request."
     (comp :path generate-for)))
 
-(defn to
+(defn href
   "Generate path + query string for the given route based on the RouteDescriptor
    stored in the given request."
   ([request route-id]
-   (to request route-id {}))
+   (href request route-id {}))
   ([request route-id values]
    (some-> (descriptor request)
            (h/href route-id values))))
+
+;; ## Matcher
+
+(defn match
+  "Parse the given path and create a map of `:id`, `:route-params`,
+   `:query-params` and `:params` based on the RouteDescriptor stored
+   in the given request."
+  ([request path]
+   (match request :get path))
+  ([request request-method path]
+   (some-> (descriptor request)
+           (h/parse request-method path))))

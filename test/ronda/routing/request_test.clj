@@ -33,7 +33,7 @@
         (path req :greet prm) => "/hello/you")
   (tabular
     (fact "about the path + query string generation function."
-          (to req :greet (merge prm ?data)) => ?href)
+          (href req :greet (merge prm ?data)) => ?href)
     ?data              ?href
     {}                 "/hello/you"
     {:enthusiasm 9001} "/hello/you?enthusiasm=9001"

@@ -1,5 +1,5 @@
 (ns ronda.routing.utils
-  (:import [java.net URLEncoder]))
+  (:import [java.net URLEncoder URLDecoder]))
 
 (defn ->str
   [v]
@@ -19,3 +19,7 @@
       (URLEncoder/encode "UTF-8")
       (.replace "+" "%20")))
 
+(defn urldecode
+  [v]
+  (-> (->str v)
+      (URLDecoder/decode "UTF-8")))
