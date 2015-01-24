@@ -23,3 +23,8 @@
   [v]
   (-> (->str v)
       (URLDecoder/decode "UTF-8")))
+
+(defmacro throwf
+  [fmt & args]
+  `(throw
+     (Exception. (format ~fmt ~@args))))
