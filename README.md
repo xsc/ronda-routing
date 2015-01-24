@@ -97,6 +97,46 @@ There is also `wrap-endpoint` (which will add a single handler interception) and
 (which will return `nil` if the default path is reached). See the [auto-generated documentation][doc]
 for more information.
 
+### Path Matching &amp; Generation
+
+The `wrap-routing` middleware ([see above](#middlewares)) enables the use of two additional features:
+
+- path generation from within a handler using `ronda.routing/href`,
+- path matching from within a handler using `ronda.routing/match`.
+
+Both functions use a RouteDescriptor injected into the request map which means that you can reference
+(and accept references to) other parts of your application in a way that avoids global state.
+
+```clojure
+(defn- article
+  [{:keys [route-params uri] :as request}]
+  (let [id (-> route-params :id Long/parseLong)]
+    {:status 200,
+     :data (routing/match request uri)
+     :body (->> {:id (inc id)}
+                (routing/href request :article)
+                (str "next article: "))}))
+
+(def app
+  (-> (constantly {:status 404, :body "not found."})
+      (routing/wrap-endpoints
+        {:article article})
+      (routing/wrap-routing routes)))
+```
+
+And, go!
+
+```clojure
+(app {:request-method :get, :uri "/articles/1"})
+;; => {:status 200,
+;;     :data {:params {:id "1"},
+;;            :query-params {},
+;;            :path "/articles/1",
+;;            :id :article,
+;;            :route-params {:id "1"}},
+;;     :body "next article: /articles/2"}
+```
+
 ## License
 
 Copyright &copy; 2015 Yannick Scherer
