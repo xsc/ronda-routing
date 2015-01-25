@@ -11,14 +11,14 @@
    to the handler unaltered."
   [handler descriptor]
   (fn [request]
-    (if-let [{:keys [id route-params]} (describe/match-request descriptor request)]
-      (-> request
-          (update-in [:route-params] (fnil merge {}) route-params)
-          (update-in [:params] (fnil merge {}) route-params)
-          (r/set-endpoint id)
-          (r/set-descriptor descriptor)
-          (handler))
-      (handler request))))
+    (let [request' (r/set-descriptor request descriptor)]
+      (if-let [{:keys [id route-params]} (describe/match-request descriptor request)]
+        (-> request'
+            (update-in [:route-params] (fnil merge {}) route-params)
+            (update-in [:params] (fnil merge {}) route-params)
+            (r/set-endpoint id)
+            (handler))
+        (handler request')))))
 
 (defn wrap-endpoints
   "Create a Ring handler that intercepts all requests that had an endpoint ID
