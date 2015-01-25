@@ -22,8 +22,6 @@ __Leiningen__ ([via Clojars](https://clojars.org/ronda/routing))
 
 ### Route Descriptors
 
-#### Example
-
 A `RouteDescriptor` is a routing-library independent representation of a series of routes. This project, however,
 does not contain any concrete implementations, so you have to explicitly include one, e.g.
 [ronda/routing-bidi][bidi-descriptor]:
