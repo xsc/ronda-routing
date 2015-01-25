@@ -5,7 +5,10 @@ a middleware-based approach to routing, allowing you to do several things:
 
 - [decouple your routing logic](#middlewares) from your handlers,
 - thus, [choose the routing library](#implementations) most suited to your requirements,
-- [generate and parse references](#path-matching--generation) to other parts of your application without global state.
+- [generate and parse references](#path-matching--generation) to other parts of your application from
+  within a handler and without global state.
+
+This isn't yet another routing/matching library. I promise.
 
 [![Build Status](https://travis-ci.org/xsc/ronda-routing.svg?branch=master)](https://travis-ci.org/xsc/ronda-routing)
 
