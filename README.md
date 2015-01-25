@@ -37,10 +37,10 @@ does not contain any concrete implementations, so you have to explicitly include
 
 #### Implementations
 
-Routing Library | `RouteDescriptor`                       | Route Format
-----------------|-----------------------------------------|-------------
-[bidi][bidi]    | [ronda-routing-bidi][bidi-descriptor]   | `["/" {["article/" :id] :article}]`
-[clout][clout]  | [ronda-routing-clout][clout-descriptor] | `{:article "/article/:id"}`
+Routing Library             | `RouteDescriptor`                       | Route Format
+----------------------------|-----------------------------------------|-------------
+[bidi][bidi]                | [ronda-routing-bidi][bidi-descriptor]   | `["/" {["article/" :id] :article}]`
+[clout][clout]  (compojure) | [ronda-routing-clout][clout-descriptor] | `{:article "/article/:id"}`
 
 You can create your own by implementing the [`ronda.routing.descriptor/RouteDescriptor`][route-descriptor] protocol -
 and feel free to open a Pull Request to add it to this list!
