@@ -148,6 +148,88 @@ And, go!
 ;;     :body "next article: /articles/2"}
 ```
 
+## Official Sales Pitch
+
+Commonly, routing logic takes a request, analyzes it and directly calls the handler that is
+able to generate a response:
+
+```
+                                    +-------------+
+                +-----------+ ----> |  Handler A  |
+                |           |       +-------------+
+  Request ----> |  Routing  |
+                |           |       +-------------+
+                +-----------+ ----> |  Handler B  |
+                                    +-------------+
+```
+
+Let's assume that `Handler A` accepts a POST request with a JSON body while `Handler B` expects
+some form parameters. Both can be handled gracefully using middlewares but, as you can see, they
+are tightly coupled with the handlers:
+
+```
+                                    +--------+-------------+
+                +-----------+ ----> |  JSON  |  Handler A  |
+                |           |       +--------+-------------+
+  Request ----> |  Routing  |
+                |           |       +--------+-------------+
+                +-----------+ ----> | Params |  Handler B  |
+                                    +--------+-------------+
+```
+
+Adding another JSON-based handler will usually result in something like the following:
+
+```
+                                    +--------+-------------+
+                +-----------+ ----> |  JSON  |  Handler A  |
+                |           |       +--------+-------------+
+  Request ----> |  Routing  |
+                |           |       +--------+-------------+
+                +-----------+ ----> | Params |  Handler B  |
+                     |              +--------+-------------+
+                     |
+                     |              +--------+-------------+
+                     -------------> |  JSON  |  Handler C  |
+                                    +--------+-------------+
+```
+
+A route thus corresponds to its own little substack of middlewares and handler, resulting in
+significant duplication across diverse applications.
+
+Instead, `ronda-routing` proposes a more decoupled approach, basically making routing logic
+something that gets injected into the application:
+
+```
+                                                   (optional
+                +-----------+  Request +          middlewares)
+                |  Routing  |  Routing Data   +--------+--------+
+  Request ----> |  Middle-  | --------------> |  JSON  | Params |
+                |   ware    |                 +--------+--------+
+                +-----------+                          |
+                     ^                                 v
+                     |                          +-------------+
+                     v                          |  intercept  |
+               +------------+                   +-------------+
+               | Descriptor |                     |    |    |
+               +------------+                     A    B    C
+
+```
+
+The `RouteDescriptor` contains the routing logic, basically producing an identifier that
+designates the final handler and gets injected into the request. Follow-up middlewares
+can then look at that identifier and decide whether they have to do anything or not.
+
+Multiple paradigms are then possible:
+
+1. Each middleware knows what handlers require it. This means maintaining a list of
+   route identifiers per middleware that trigger activation if they are encountered.
+2. The route descriptor contains feature-specific data (akin to "feature flags") for
+   each route that is read by middlewares, triggering them when necessary.
+
+The second one has immense value when it comes to documentation and is the one preferred
+by ronda - but the possibility to use the first approach (or even fall back to a per-handler
+middleware stack) remains.
+
 ## Contributing
 
 Contributions are very welcome.
