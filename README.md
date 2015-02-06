@@ -8,7 +8,8 @@ a middleware-based approach to routing, allowing you to do several things:
 - [generate and parse references](#path-matching--generation) to other parts of your application from
   within a handler and without global state.
 
-This isn't yet another routing/matching library. I promise.
+This isn't yet another routing/matching library. I promise. Read the [sales pitch](#official-sales-pitch)
+to see what problem is being solved.
 
 [![Build Status](https://travis-ci.org/xsc/ronda-routing.svg?branch=master)](https://travis-ci.org/xsc/ronda-routing)
 
