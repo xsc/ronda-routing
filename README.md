@@ -197,8 +197,8 @@ Adding another JSON-based handler will usually result in something like the foll
 A route thus corresponds to its own little substack of middlewares and handler, resulting in
 significant duplication across diverse applications.
 
-Instead, `ronda-routing` proposes a more decoupled approach, basically making routing logic
-something that gets injected into the application:
+Instead, `ronda-routing` proposes a more decoupled approach, making routing logic something that
+gets injected into the application:
 
 ```
                                                    (optional
