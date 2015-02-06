@@ -8,8 +8,7 @@ a middleware-based approach to routing, allowing you to do several things:
 - [generate and parse references](#path-matching--generation) to other parts of your application from
   within a handler and without global state.
 
-This isn't yet another routing/matching library. I promise. Read the [sales pitch](#official-sales-pitch)
-to see what problem is being solved.
+This isn't yet another routing/matching library. I promise.
 
 [![Build Status](https://travis-ci.org/xsc/ronda-routing.svg?branch=master)](https://travis-ci.org/xsc/ronda-routing)
 
@@ -21,30 +20,7 @@ __Leiningen__ ([via Clojars](https://clojars.org/ronda/routing))
 
 [![Clojars Project](http://clojars.org/ronda/routing/latest-version.svg)](http://clojars.org/ronda/routing)
 
-### Route Descriptors
-
-A `RouteDescriptor` is a routing-library independent representation of a series of routes. This project, however,
-does not contain any concrete implementations, so you have to explicitly include one, e.g.
-[ronda/routing-bidi][bidi-descriptor]:
-
-```clojure
-(require '[ronda.routing.bidi :as bidi])
-
-(def routes
-  (bidi/descriptor
-    ["/" {"articles"        :articles
-          ["articles/" :id] :article}]))
-```
-
-#### Implementations
-
-Routing Library             | `RouteDescriptor`                       | Route Format
-----------------------------|-----------------------------------------|-------------
-[bidi][bidi]                | [ronda-routing-bidi][bidi-descriptor]   | `["/" {["article/" :id] :article}]`
-[clout][clout]  (compojure) | [ronda-routing-clout][clout-descriptor] | `{:article "/article/:id"}`
-
-You can create your own by implementing the [`ronda.routing.descriptor/RouteDescriptor`][route-descriptor] protocol -
-and feel free to open a Pull Request to add it to this list!
+Read the [sales pitch](#official-sales-pitch) to see what problem is being solved.
 
 ### Middlewares
 
@@ -148,6 +124,31 @@ And, go!
 ;;            :route-params {:id "1"}},
 ;;     :body "next article: /articles/2"}
 ```
+
+### Route Descriptors
+
+A `RouteDescriptor` is a routing-library independent representation of a series of routes. This project, however,
+does not contain any concrete implementations, so you have to explicitly include one, e.g.
+[ronda/routing-bidi][bidi-descriptor]:
+
+```clojure
+(require '[ronda.routing.bidi :as bidi])
+
+(def routes
+  (bidi/descriptor
+    ["/" {"articles"        :articles
+          ["articles/" :id] :article}]))
+```
+
+#### Implementations
+
+Routing Library             | `RouteDescriptor`                       | Route Format
+----------------------------|-----------------------------------------|-------------
+[bidi][bidi]                | [ronda-routing-bidi][bidi-descriptor]   | `["/" {["article/" :id] :article}]`
+[clout][clout]  (compojure) | [ronda-routing-clout][clout-descriptor] | `{:article "/article/:id"}`
+
+You can create your own by implementing the [`ronda.routing.descriptor/RouteDescriptor`][route-descriptor] protocol -
+and feel free to open a Pull Request to add it to this list!
 
 ## Official Sales Pitch
 
