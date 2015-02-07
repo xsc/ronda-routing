@@ -8,6 +8,7 @@
 (def handlers
   {:greet (fn [{:keys [params] :as request}]
             {:status 200
+             :meta (-> (rq/routing-data request) :meta)
              :endpoint (rq/endpoint request)
              :descriptor (rq/descriptor request)
              :body (format "%s, %s! (%s)"
@@ -35,12 +36,13 @@
             (wrap-endpoints handlers)
             (wrap-routing test-descriptor))]
   (fact "about the concrete routing middleware."
-        (let [{:keys [status body endpoint descriptor]}
+        (let [{:keys [status body endpoint meta descriptor]}
               (h {:request-method :get
                   :uri "/hello/world"})]
           status => 200
           body => "Hello, World! (/cheerio/miss-sophie)"
           endpoint => :greet
+          meta => {:json? true}
           descriptor => test-descriptor)
         (:status
           (h {:request-method :get

@@ -10,16 +10,19 @@
       (if (= uri "/hello/world")
         {:id :greet
          :route-params {:greeting "hello"
-                        :recipient "world"}}))
+                        :recipient "world"}
+         :meta {:json? true}}))
     (generate [_ route-id {:keys [greeting recipient] :as params}]
       (when (= route-id :greet)
         (assert (and greeting recipient))
         {:path (format "/%s/%s" greeting recipient)
          :route-params (select-keys params [:greeting :recipient])
-         :query-params (dissoc params :greeting :recipient)}))
+         :query-params (dissoc params :greeting :recipient)
+         :meta {:json? true}}))
     (routes [_]
       {:greet {:path ["/" :greeting "/" :recipient]
-               :methods #{:get}}})))
+               :methods #{:get}
+               :meta {:json? true}}})))
 
 ;; ## Tests
 

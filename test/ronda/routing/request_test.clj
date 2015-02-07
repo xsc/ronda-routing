@@ -6,18 +6,15 @@
 
 (fact "about setters/getters."
       (let [data (-> {}
-                     (set-endpoint :x)
+                     (set-routing-data {:id :x, :meta {}})
                      (set-descriptor test-descriptor))]
+        (routing-data data) => {:id :x, :meta {}}
         (endpoint data) => :x
-        (descriptor data) => test-descriptor
-        (descriptor
-          (update-descriptor
-            data
-            (fn [_] nil))) => falsey))
+        (descriptor data) => test-descriptor))
 
 (let [req (-> {:request-method :get
                :uri "/hello/world"}
-              (set-endpoint :greet)
+              (set-routing-data {:id :greet})
               (set-descriptor test-descriptor))
       prm {:greeting "hello", :recipient "you"}
       gen {:path "/hello/you"

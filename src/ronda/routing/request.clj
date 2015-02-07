@@ -5,30 +5,33 @@
 
 ;; ## Access
 
-(defn set-endpoint
-  "Set the endpoint the request should be routed to."
-  [request id]
-  (assoc request :ronda/endpoint id))
+(defn set-routing-data
+  "Set the routing data for the given request."
+  [request data]
+  {:pre [(map? request)
+         (map? data)
+         (contains? data :id)]}
+  (assoc request :ronda/routing data))
 
 (defn set-descriptor
   "Set the descriptor the request should be routed to."
   [request descriptor]
   (assoc request :ronda/descriptor descriptor))
 
-(defn endpoint
-  "Get the endpoint the request should be routed to."
+(defn routing-data
+  "Get the routing data for the given request"
   [request]
-  (:ronda/endpoint request))
+  (:ronda/routing request))
+
+(defn endpoint
+  "Get the endpoint data the request should be routed to."
+  [request]
+  (some-> (routing-data request) :id))
 
 (defn descriptor
   "Get the descriptor that caused the request to be routed."
   [request]
   (:ronda/descriptor request))
-
-(defn update-descriptor
-  "Update the descriptor stored in the request."
-  [request f]
-  (update-in request [:ronda/descriptor] f))
 
 ;; ## Helper
 
