@@ -152,51 +152,67 @@ and feel free to open a Pull Request to add it to this list!
 
 ## Official Sales Pitch
 
+### What We Have
+
 Commonly, routing logic takes a request, analyzes it and directly calls the handler that is
 able to generate a response:
 
 ```
-                                    +-------------+
-                +-----------+ ----> |  Handler A  |
-                |           |       +-------------+
+                +-----------+
+                |           | ----> A
   Request ----> |  Routing  |
-                |           |       +-------------+
-                +-----------+ ----> |  Handler B  |
-                                    +-------------+
+                |           | ----> B
+                +-----------+
 ```
 
-Let's assume that `Handler A` accepts a POST request with a JSON body while `Handler B` expects
-some form parameters. Both can be handled gracefully using middlewares but, as you can see, they
-are tightly coupled with the handlers:
+Let's assume that `A` accepts a POST request with a JSON body while `B` expects some form
+parameters. Both can be handled gracefully using middlewares but, as you can see, they are
+tightly coupled with the handlers:
 
 ```
-                                    +--------+-------------+
-                +-----------+ ----> |  JSON  |  Handler A  |
-                |           |       +--------+-------------+
+                                    +--------+
+                +-----------+ ----> |  JSON  | ----> A
+                |           |       +--------+
   Request ----> |  Routing  |
-                |           |       +--------+-------------+
-                +-----------+ ----> | Params |  Handler B  |
-                                    +--------+-------------+
+                |           |       +--------+
+                +-----------+ ----> | Params | ----> B
+                                    +--------+
 ```
 
 Adding another JSON-based handler will usually result in something like the following:
 
 ```
-                                    +--------+-------------+
-                +-----------+ ----> |  JSON  |  Handler A  |
-                |           |       +--------+-------------+
-  Request ----> |  Routing  |
-                |           |       +--------+-------------+
-                +-----------+ ----> | Params |  Handler B  |
-                     |              +--------+-------------+
-                     |
-                     |              +--------+-------------+
-                     -------------> |  JSON  |  Handler C  |
-                                    +--------+-------------+
+                                    +--------+
+                +-----------+ ----> |  JSON  | ----> A
+                |           |       +--------+
+  Request ----> |  Routing  |       +--------+
+                |           | ----> | Params | ----> B
+                +-----------+       +--------+
+                     |              +--------+
+                     -------------> |  JSON  | ----> C
+                                    +--------+
 ```
 
-A route thus corresponds to its own little substack of middlewares and handler, resulting in
-significant duplication across diverse applications.
+Which makes a route correspond to its own little substack of middlewares and handler, resulting in
+significant duplication across diverse applications. Alternatively, one could model the stack like
+this:
+
+```
+                                    +--------+-----------+ ----> A
+                +-----------+ ----> |  JSON  | Routing 2 |
+                |           |       +--------+-----------+ ----> C
+  Request ----> |  Routing  |
+                |           |       +--------+
+                +-----------+ ----> | Params | ----> B
+                                    +--------+
+```
+
+This can work well if the subsystems can be easily identified (e.g. all JSON handlers reside under
+`/api`) but will fall apart very quickly if you the system is more heterogenous. Also, having
+routing logic in two ore more different places can make it harder to reason about it in the first
+place.
+
+### What We Could Have
 
 Instead, `ronda-routing` proposes a more decoupled approach, making routing logic something that
 gets injected into the application:
@@ -217,9 +233,10 @@ gets injected into the application:
 
 ```
 
-The `RouteDescriptor` contains the routing logic, basically producing an identifier that
-designates the final handler and gets injected into the request. Follow-up middlewares
-can then look at that identifier and decide whether they have to do anything or not.
+The [`Descriptor`](#route-descriptors) contains the routing logic, basically producing
+an identifier that designates the final handler and gets injected into the request.
+Follow-up middlewares can then look at that identifier and decide whether they have to
+do anything or not.
 
 Multiple paradigms are then possible:
 
