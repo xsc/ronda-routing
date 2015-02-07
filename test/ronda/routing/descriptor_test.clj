@@ -17,10 +17,6 @@
         {:path (format "/%s/%s" greeting recipient)
          :route-params (select-keys params [:greeting :recipient])
          :query-params (dissoc params :greeting :recipient)}))
-    (prefix-string [this prefix]
-      (throw (Exception.)))
-    (prefix-route-param [this k pattern]
-      (throw (Exception.)))
     (routes [_]
       {:greet {:path ["/" :greeting "/" :recipient]
                :methods #{:get}}})))

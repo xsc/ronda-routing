@@ -5,11 +5,12 @@
              [prefix :refer [prefix]]]))
 
 (defrecord SingleDescriptor [sq]
-  describe/RouteDescriptor
+  describe/PrefixableRouteDescriptor
   (prefix-string [this s]
     (update-in this [:sq] conj s))
   (prefix-route-param [this k p]
     (update-in this [:sq] conj (if p [p k] k)))
+  describe/RouteDescriptor
   (routes [_]
     {:endpoint {:path (vec sq)
                 :methods #{:get}}}))
