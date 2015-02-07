@@ -15,6 +15,7 @@
   [ronda.routing.prefix
    prefix]
   [ronda.routing.request
+   routing-data
    endpoint
    href
    match
