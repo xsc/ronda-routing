@@ -208,9 +208,8 @@ this:
 ```
 
 This can work well if the subsystems can be easily identified (e.g. all JSON handlers reside under
-`/api`) but will fall apart very quickly if you the system is more heterogenous. Also, having
-routing logic in two ore more different places can make it harder to reason about it in the first
-place.
+`/api`) but will fall apart very quickly if the system is more heterogenous. Also, having routing
+logic in two ore more different places can make it harder to reason about it in the first place.
 
 ### What We Could Have
 
