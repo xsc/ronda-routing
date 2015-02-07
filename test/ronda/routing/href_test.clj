@@ -28,6 +28,7 @@
             :path "/hello/world"
             :route-params prm
             :query-params qrm
+            :meta {:json? true}
             :params (merge prm qrm)}
         (parse test-descriptor :get "/hello/you")
         => nil?))

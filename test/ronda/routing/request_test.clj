@@ -19,6 +19,7 @@
       prm {:greeting "hello", :recipient "you"}
       gen {:path "/hello/you"
            :route-params prm
+           :meta {:json? true}
            :query-params {}}]
   (fact "about generate function w/o query params."
         (generate-for req :greet) => (throws AssertionError)
