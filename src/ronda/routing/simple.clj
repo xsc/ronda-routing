@@ -2,27 +2,50 @@
   (:require [ronda.routing.descriptor :refer :all]
             [clojure.set :refer [map-invert]]))
 
-(declare descriptor)
+(defn- prepare-routes
+  [routes]
+  (->> (for [[route-id path] routes]
+         [route-id {:path path, :meta {}}])
+       (into {})))
 
-(deftype SimpleDescriptor [uri->endpoint endpoint->uri]
+(deftype SimpleDescriptor [route-data uri->endpoint]
   RouteDescriptor
   (match [_ _ uri]
     (if-let [id (uri->endpoint uri)]
-      {:id id, :route-params {}}))
-  (generate [_ route-id values]
-    (if-let [uri (endpoint->uri route-id)]
-      {:path uri
+      {:id id,
        :route-params {}
-       :query-params values}))
-  (prefix-string [_ prefix]
-    (->> (for [[k v] endpoint->uri]
-           [k (str prefix v)])
-         (into {})
-         (descriptor)))
-  (prefix-route-param [_ _ _]
-    (throw (UnsupportedOperationException.)))
+       :meta (get-in route-data [id :meta] {})}))
+  (generate [_ route-id values]
+    (if-let [data (get route-data route-id)]
+      (assoc data
+             :route-params {}
+             :query-params values)))
+  (update-metadata [_ route-id f]
+    (if (contains? route-data route-id)
+      (SimpleDescriptor.
+        (update-in route-data [route-id :meta] f)
+        uri->endpoint)
+      (throw
+        (IllegalArgumentException.
+          (format "no such route: %s" route-id)))))
   (routes [_]
-    endpoint->uri))
+    route-data)
+
+  PrefixableRouteDescriptor
+  (prefix-string [_ prefix]
+    (let [{:keys [routes uris]}
+          (reduce
+            (fn [m [route-id {:keys [path] :as data}]]
+              (let [path' (str prefix path)]
+                (-> m
+                    (assoc-in [:uris path'] route-id)
+                    (assoc-in [:routes route-id] (assoc data :path path')))))
+            {} route-data)]
+      (SimpleDescriptor. routes uris)))
+  (prefix-route-param [_ _ _]
+    (throw
+      (UnsupportedOperationException.
+        "simple descriptor does not support route params."))))
 
 (defn descriptor
   "Simple RouteDescriptor that only allows matching constant
@@ -39,5 +62,5 @@
   {:pre [(every? keyword? (keys routes))
          (every? string? (vals routes))]}
   (SimpleDescriptor.
-    (map-invert routes)
+    (prepare-routes routes)
     routes))
