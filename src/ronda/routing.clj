@@ -11,7 +11,11 @@
    wrap-routing
    wrap-endpoints
    wrap-endpoint
-   compile-endpoints]
+   compile-endpoints
+   conditional-middleware
+   conditional-transform
+   endpoint-middleware
+   endpoint-transform]
   [ronda.routing.prefix
    prefix]
   [ronda.routing.request
