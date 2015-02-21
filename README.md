@@ -85,6 +85,26 @@ There is also `wrap-endpoint` (which will add a single handler interception) and
 (which will return `nil` if the default path is reached). See the [auto-generated documentation][doc]
 for more information.
 
+__`(conditional-middleware handler p? wrap-fn)`__
+
+This middleware will route requests either to the plain `handler` or to
+`(wrap-fn handler)`, depending on whether they match the given predicate `p?` or
+not. For example, to only decode JSON bodies for the `:article` endpoint:
+
+```clojure
+(-> app
+    (routing/conditional-middleware
+      #(= (routing/endpoint %) :article)
+      decode-json-body)
+    (routing/wrap-routing routes))
+```
+
+There are more variants of this logic (`conditional-transform` to conditionally
+apply a function to the request before passing it to the handler,
+`endpoint-middleware` and  `endpoint-transform` to have predicate based on
+`ronda.routing/endpoint`) which can be found in the [auto-generated
+documentation][doc].
+
 ### Path Matching &amp; Generation
 
 The `wrap-routing` middleware ([see above](#middlewares)) enables the use of two additional features:
