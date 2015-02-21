@@ -49,3 +49,54 @@
   (wrap-endpoints
     (constantly nil)
     handlers))
+
+(defn conditional-middleware
+  "Apply the given middleware only if the request matches the given predicate."
+  [handler p? wrap-fn]
+  (let [wrapped-handler (wrap-fn handler)]
+    (fn conditional-handler
+      [request]
+      (if (p? request)
+        (wrapped-handler request)
+        (handler request)))))
+
+(defn conditional-transform
+  "Apply the given transformation function to the request, only if it matches
+   the given predicate."
+  [handler p? f]
+  (fn conditional-transform-handler
+    [request]
+    (handler
+      (if (p? request)
+        (f request)
+        request))))
+
+(defn- routed-pred
+  "Generate predicate that checks whether a given request is being routed
+   to one of the given endpoints."
+  [endpoints]
+  (comp
+    (if (sequential? endpoints)
+      (set endpoints)
+      #{endpoints})
+    r/endpoint))
+
+(defn endpoint-middleware
+  "Like `conditional-middleware`, applying the given middleware only if the
+   request is being routed to one of the given endpoints. (A single
+   non-sequential endpoint ID may be given instead of a seq of multiple.)"
+  [handler endpoints wrap-fn]
+  (conditional-middleware
+    handler
+    (routed-pred endpoints)
+    wrap-fn))
+
+(defn endpoint-transform
+  "Like `conditional-transform`, applying the given function to requests
+   that are being routed to one of the given endpoints. (A single non-sequential
+   endpoint ID may be given instead of a seq of multiple.)"
+  [handler endpoints f]
+  (conditional-transform
+    handler
+    (routed-pred endpoints)
+    f))

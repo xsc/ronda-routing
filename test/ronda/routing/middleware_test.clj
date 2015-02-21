@@ -47,3 +47,27 @@
         (:status
           (h {:request-method :get
               :uri "/hola"})) => 404))
+
+(fact "about conditional middlewares."
+      (let [h (-> (fn [{:keys [body]}]
+                    {:status 200
+                     :body body})
+                  (conditional-middleware
+                    :no-content?
+                    (fn [handler]
+                      (fn [request]
+                        (handler (assoc request :body ""))))))]
+        (h {:request-method :get, :body "hello!"})
+        => {:status 200, :body "hello!"}
+        (h {:request-method :get, :body "hello!", :no-content? true})
+        => {:status 200, :body ""}))
+
+(fact "about conditional transformations."
+      (let [h (-> (fn [{:keys [body]}]
+                    {:status 200
+                     :body body})
+                  (conditional-transform :no-content? #(assoc % :body "")))]
+        (h {:request-method :get, :body "hello!"})
+        => {:status 200, :body "hello!"}
+        (h {:request-method :get, :body "hello!", :no-content? true})
+        => {:status 200, :body ""}))
