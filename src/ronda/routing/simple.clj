@@ -63,4 +63,4 @@
          (every? string? (vals routes))]}
   (SimpleDescriptor.
     (prepare-routes routes)
-    routes))
+    (map-invert routes)))
