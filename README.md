@@ -102,8 +102,37 @@ not. For example, to only decode JSON bodies for the `:article` endpoint:
 There are more variants of this logic (`conditional-transform` to conditionally
 apply a function to the request before passing it to the handler,
 `endpoint-middleware` and  `endpoint-transform` to have predicate based on
-`ronda.routing/endpoint`) which can be found in the [auto-generated
+`ronda.routing/endpoint`), all of which can be found in the [auto-generated
 documentation][doc].
+
+__`(meta-middleware handler middleware-key wrap-fn [options])`__
+
+This middleware will route requests either to the plain `handler` or to
+`(wrap-fn handler)`, depending on request metadata provided by the
+[`RouteDescriptor`](#route-descriptors). In particular, you can enable
+middlewares per-route using `enable-middlewares` and `disable-middlewares`:
+
+```clojure
+(def routes'
+  (-> (bidi/descriptor
+        ["/" {"articles" :articles
+              "api"      :api}])
+      (r/disable-middlewares :api [:tracking])
+      (r/enable-middlewares  :api [:json])))
+```
+
+Middlewares are then instantiated using e.g.:
+
+```clojure
+(def app
+  (-> handler
+      (r/meta-middleware :tracking wrap-tracking {:enabled? true})
+      (r/meta-middleware :json     wrap-json)
+      (r/wrap-routing routes')))
+```
+
+The optional `options` map can contain the key `:enabled?` which, when set to
+`true`, will have a middleware be applied unless it is explicitly disabled.
 
 ### Path Matching &amp; Generation
 
