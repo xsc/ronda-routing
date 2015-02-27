@@ -105,7 +105,7 @@ apply a function to the request before passing it to the handler,
 `ronda.routing/endpoint`), all of which can be found in the [auto-generated
 documentation][doc].
 
-__`(meta-middleware handler middleware-key wrap-fn [options])`__
+__`(routed-middleware handler middleware-key wrap-fn [options])`__
 
 This middleware will route requests either to the plain `handler` or to
 `(wrap-fn handler)`, depending on request metadata provided by the
@@ -126,8 +126,8 @@ Middlewares are then instantiated using e.g.:
 ```clojure
 (def app
   (-> handler
-      (r/meta-middleware :tracking wrap-tracking {:enabled? true})
-      (r/meta-middleware :json     wrap-json)
+      (r/routed-middleware :tracking wrap-tracking {:enabled? true})
+      (r/routed-middleware :json     wrap-json)
       (r/wrap-routing routes')))
 ```
 

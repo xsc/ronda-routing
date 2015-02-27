@@ -1,9 +1,9 @@
-(ns ronda.routing.meta-middleware-test
+(ns ronda.routing.routed-middleware-test
   (:require [midje.sweet :refer :all]
             [ronda.routing
              [simple :as simple]
              [middleware :refer [wrap-routing]]
-             [meta-middleware :as m]]))
+             [routed-middleware :as m]]))
 
 (let [d (-> (simple/descriptor
               {:a "/enable"
@@ -20,7 +20,7 @@
   (tabular
     (fact "about middleware enabling."
           (let [h' (-> h
-                       (m/meta-middleware :m m)
+                       (m/routed-middleware :m m)
                        (wrap-routing d))]
             (:body (h' {:request-method :get, :uri ?uri})) => ?body))
     ?uri       ?body
@@ -30,7 +30,7 @@
   (tabular
     (fact "about middleware disabling."
           (let [h' (-> h
-                       (m/meta-middleware :m m {:enabled? true})
+                       (m/routed-middleware :m m {:enabled? true})
                        (wrap-routing d))]
             (:body (h' {:request-method :get, :uri ?uri})) => ?body))
     ?uri       ?body

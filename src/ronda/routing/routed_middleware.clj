@@ -1,4 +1,4 @@
-(ns ronda.routing.meta-middleware
+(ns ronda.routing.routed-middleware
   (:require [ronda.routing
              [descriptor :as describe]
              [middleware :as m]
@@ -55,7 +55,7 @@
     #(not (contains-middleware? % :disable middleware-key))
     #(contains-middleware? % :enable middleware-key)))
 
-(defn meta-middleware
+(defn routed-middleware
   "Generate a handler that applies the middleware represented by `wrap-fn` only
    if it is explicitly enabled/not-disabled for the currently routed endpoint.
    This has to be used below `ronda.routing.middleware/wrap-routing`."

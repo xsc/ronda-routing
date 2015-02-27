@@ -1,6 +1,6 @@
 (ns ronda.routing
   (:require [potemkin :refer [import-vars]]
-            [ronda.routing meta-middleware middleware prefix request]))
+            [ronda.routing routed-middleware middleware prefix request]))
 
 ;; ## User-Facing API
 ;;
@@ -16,10 +16,10 @@
    conditional-transform
    endpoint-middleware
    endpoint-transform]
-  [ronda.routing.meta-middleware
+  [ronda.routing.routed-middleware
    enable-middlewares
    disable-middlewares
-   meta-middleware]
+   routed-middleware]
   [ronda.routing.prefix
    prefix]
   [ronda.routing.request
