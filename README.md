@@ -3,7 +3,9 @@
 __ronda-routing__ is part of the [ronda](https://github.com/xsc/ronda) library and offers
 a middleware-based approach to routing, allowing you to do several things:
 
-- [decouple your routing logic](#middlewares) from your handlers,
+- [decouple your routing logic](#wrap-routing) from your handlers,
+- use [conditional middlewares](#conditional-middleware) or middlewares that get
+  [triggered by route metadata](#routed-middleware),
 - thus, [choose the routing library](#implementations) most suited to your requirements,
 - [generate and parse references](#path-matching--generation) to other parts of your application from
   within a handler and without global state.
@@ -24,6 +26,7 @@ Read the [sales pitch](#official-sales-pitch) to see what problem is being solve
 
 ### Middlewares
 
+<a name='wrap-routing'></a>
 __`(wrap-routing handler descriptor)`__
 
 The `ronda.routing/wrap-routing` middleware will use a [`RouteDescriptor`](#route-descriptors) to decide on an
@@ -85,6 +88,7 @@ There is also `wrap-endpoint` (which will add a single handler interception) and
 (which will return `nil` if the default path is reached). See the [auto-generated documentation][doc]
 for more information.
 
+<a name='conditional-middleware'></a>
 __`(conditional-middleware handler p? wrap-fn)`__
 
 This middleware will route requests either to the plain `handler` or to
@@ -105,6 +109,7 @@ apply a function to the request before passing it to the handler,
 `ronda.routing/endpoint`), all of which can be found in the [auto-generated
 documentation][doc].
 
+<a name='routed-middleware'></a>
 __`(routed-middleware handler middleware-key wrap-fn [options])`__
 
 This middleware will route requests either to the plain `handler` or to
