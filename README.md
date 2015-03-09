@@ -4,9 +4,9 @@ __ronda-routing__ is part of the [ronda](https://github.com/xsc/ronda) library a
 a middleware-based approach to routing, allowing you to do several things:
 
 - [decouple your routing logic](#wrap-routing) from your handlers,
+- thus, [choose the routing library](#implementations) most suited to your requirements,
 - use [conditional middlewares](#conditional-middleware) or middlewares that get
   [triggered by route metadata](#routed-middleware),
-- thus, [choose the routing library](#implementations) most suited to your requirements,
 - [generate and parse references](#path-matching--generation) to other parts of your application from
   within a handler and without global state.
 
