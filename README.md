@@ -179,6 +179,15 @@ And, go!
 ;;     :body "next article: /articles/2"}
 ```
 
+Note that the `RouteDescriptor` decides which values are used as query
+parameters. The following rules apply when passing values to `href`:
+
+- keywords will be converted to strings.
+- `nil` values will be ignored.
+- seqs will be concatenated using commas.
+
+If you want different behaviours you have to preprocess the values map.
+
 ### Route Descriptors
 
 A `RouteDescriptor` is a routing-library independent representation of a series of routes. This project, however,

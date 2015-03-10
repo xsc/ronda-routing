@@ -1,11 +1,12 @@
 (ns ronda.routing.utils
+  (:require [clojure.string :as string])
   (:import [java.net URLEncoder URLDecoder]))
 
 (defn ->str
   [v]
-  (if (keyword? v)
-    (name v)
-    (str v)))
+  (cond (keyword? v) (name v)
+        (sequential? v) (string/join "," (map ->str v))
+        :else (str v)))
 
 (defn stringify-vals
   [m]

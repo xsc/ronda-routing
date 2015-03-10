@@ -19,6 +19,8 @@
     {:enthusiasm 9001} "/hello/you?enthusiasm=9001"
     {:a 0, :b 1}       "/hello/you?a=0&b=1"
     {:escape :+++}     "/hello/you?escape=%2B%2B%2B"
+    {:seq [1 2 3]}     "/hello/you?seq=1%2C2%2C3"
+    {:seq [1]}         "/hello/you?seq=1"
     {:nil nil, :x 0}   "/hello/you?x=0"))
 
 (let [prm {:greeting "hello", :recipient "world"}
