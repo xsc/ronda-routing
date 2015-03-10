@@ -18,7 +18,8 @@
     {}                 "/hello/you"
     {:enthusiasm 9001} "/hello/you?enthusiasm=9001"
     {:a 0, :b 1}       "/hello/you?a=0&b=1"
-    {:escape :+++}     "/hello/you?escape=%2B%2B%2B"))
+    {:escape :+++}     "/hello/you?escape=%2B%2B%2B"
+    {:nil nil, :x 0}   "/hello/you?x=0"))
 
 (let [prm {:greeting "hello", :recipient "world"}
       qrm {:a "0", :b "1"}]

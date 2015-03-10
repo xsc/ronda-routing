@@ -6,6 +6,11 @@
 
 ;; ## Generate
 
+(defn- filter-nils
+  [values]
+  (->> (filter (comp some? val) values)
+       (into {})))
+
 (defn- generate-query-string
   [query-params]
   (->> (for [[k v] (sort-by key query-params)]
@@ -26,7 +31,9 @@
   "Generate path + query-string for the given route based on the given
    RouteDescriptor."
   [descriptor route-id values]
-  (if-let [{:keys [path query-params]} (->> (u/stringify-vals values)
+  (if-let [{:keys [path query-params]} (->> values
+                                            (filter-nils)
+                                            (u/stringify-vals)
                                             (describe/generate
                                               descriptor
                                               route-id))]
