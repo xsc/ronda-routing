@@ -17,21 +17,36 @@
          (update-in [:middlewares conj-key] (fnil conj #{}) k)
          (update-in [:middlewares disj-key] (fnil disj #{}) k))))
 
+(defn- conj-disj-all
+  "Update middleware metadata, conjing the given values to `conj-key` and
+   disjing them from `disj-key` "
+  [descriptor conj-key disj-key [route-id ks]]
+  (reduce
+    #(conj-disj-middleware %1 route-id conj-key disj-key %2)
+    descriptor ks))
+
+(defn- pairs-of
+  "Create a seq of pairs, starting with `[a b]`."
+  [a b vs]
+  (cons [a b] (partition 2 vs)))
+
 (defn enable-middlewares
   "Enable the given middlewares for the endpoint identified by the given
-   route ID."
-  [descriptor route-id ks]
+   route ID/middleware key pairs."
+  [descriptor route-id ks & more]
   (reduce
-    #(conj-disj-middleware %1 route-id :enable :disable %2)
-    descriptor ks))
+    #(conj-disj-all % :enable :disable %2)
+    descriptor
+    (pairs-of route-id ks more)))
 
 (defn disable-middlewares
   "Disable the given middlewares for the endpoint identified by the given
-   route ID."
-  [descriptor route-id ks]
+   route ID/middleware key pairs."
+  [descriptor route-id ks & more]
   (reduce
-    #(conj-disj-middleware %1 route-id :disable :enable %2)
-    descriptor ks))
+    #(conj-disj-all % :disable :enable %2)
+    descriptor
+    (pairs-of route-id ks more)))
 
 ;; ## Metadata-Driven Middlewares
 

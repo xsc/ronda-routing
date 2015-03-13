@@ -8,8 +8,9 @@
 (let [d (-> (simple/descriptor
               {:a "/enable"
                :b "/disable"
-               :c "/default"})
-            (m/enable-middlewares  :a [:m])
+               :c "/default"
+               :d "/enable2"})
+            (m/enable-middlewares  :a [:m] :d [:m])
             (m/disable-middlewares :b [:m]))
       m #(fn [request]
            (% (assoc request :middleware true)))
