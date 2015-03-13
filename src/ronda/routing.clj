@@ -1,12 +1,20 @@
 (ns ronda.routing
   (:require [potemkin :refer [import-vars]]
-            [ronda.routing routed-middleware middleware prefix request]))
+            [ronda.routing
+             descriptor
+             routed-middleware
+             middleware
+             prefix
+             request]))
 
 ;; ## User-Facing API
 ;;
 ;; These are the most commonly used functions exposed by this project.
 
 (import-vars
+  [ronda.routing.descriptor
+   update-metadata
+   routes]
   [ronda.routing.middleware
    wrap-routing
    wrap-endpoints
