@@ -137,8 +137,7 @@ Middlewares are then instantiated using e.g.:
       (r/wrap-routing routes')))
 ```
 
-The optional `options` map can contain the key `:enabled?` which, when set to
-`true`, will have a middleware be applied unless it is explicitly disabled.
+An `active-routed-middleware` will be applied unless explicitly disabled.
 
 ### Path Matching &amp; Generation
 
