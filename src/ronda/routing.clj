@@ -13,6 +13,8 @@
 
 (import-vars
   [ronda.routing.descriptor
+   assoc-metadata
+   merge-metadata
    update-metadata
    routes]
   [ronda.routing.middleware

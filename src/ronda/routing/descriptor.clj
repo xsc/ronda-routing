@@ -55,3 +55,20 @@
   "Match request against descriptor"
   [descriptor {:keys [request-method uri]}]
   (match descriptor request-method uri))
+
+(defn ^{:added "0.2.0"} merge-metadata
+  "Merge the given map into the given routes metadata."
+  [descriptor route-id m]
+  {:pre [(map? m)]}
+  (update-metadata
+    descriptor
+    route-id
+    #(merge % m)))
+
+(defn ^{:added "0.2.0"} assoc-metadata
+  "Assoc a key/value pair into the given routes metadata."
+  [descriptor route-id k v]
+  (update-metadata
+    descriptor
+    route-id
+    #(assoc % k v)))
