@@ -55,12 +55,23 @@
     #(not (contains-middleware? % :disable middleware-key))
     #(contains-middleware? % :enable middleware-key)))
 
-(defn routed-middleware
-  "Generate a handler that applies the middleware represented by `wrap-fn` only
-   if it is explicitly enabled/not-disabled for the currently routed endpoint.
-   This has to be used below `ronda.routing.middleware/wrap-routing`."
-  [handler middleware-key wrap-fn & [{:keys [enabled?] :or {enabled? false}}]]
+(defn- mk-middleware
+  [handler middleware-key enabled? wrap-fn args]
   (m/conditional-middleware
     handler
     (generate-predicate middleware-key enabled?)
-    wrap-fn))
+    #(apply wrap-fn % args)))
+
+(defn routed-middleware
+  "Generate a handler that applies the middleware represented by `wrap-fn` only
+   if it is explicitly enabled for the currently routed endpoint.
+   This has to be used below `ronda.routing.middleware/wrap-routing`."
+  [handler middleware-key wrap-fn & args]
+  (mk-middleware handler middleware-key false wrap-fn args))
+
+(defn active-routed-middleware
+  "Generate a handler that applies the middleware represented by `wrap-fn`
+   unless it is explicitly disabled for the currently routed endpoint.
+   This has to be used below `ronda.routing.middleware/wrap-routing`."
+  [handler middleware-key wrap-fn & args]
+  (mk-middleware handler middleware-key true wrap-fn args))

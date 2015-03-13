@@ -30,7 +30,7 @@
   (tabular
     (fact "about middleware disabling."
           (let [h' (-> h
-                       (m/routed-middleware :m m {:enabled? true})
+                       (m/active-routed-middleware :m m)
                        (wrap-routing d))]
             (:body (h' {:request-method :get, :uri ?uri})) => ?body))
     ?uri       ?body
