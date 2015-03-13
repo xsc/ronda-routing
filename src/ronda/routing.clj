@@ -17,6 +17,7 @@
    endpoint-middleware
    endpoint-transform]
   [ronda.routing.routed-middleware
+   active-routed-middleware
    enable-middlewares
    disable-middlewares
    routed-middleware]

@@ -69,7 +69,7 @@
   [handler middleware-key wrap-fn & args]
   (mk-middleware handler middleware-key false wrap-fn args))
 
-(defn active-routed-middleware
+(defn ^{:added "0.2.0"} active-routed-middleware
   "Generate a handler that applies the middleware represented by `wrap-fn`
    unless it is explicitly disabled for the currently routed endpoint.
    This has to be used below `ronda.routing.middleware/wrap-routing`."
