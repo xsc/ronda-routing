@@ -110,12 +110,13 @@ apply a function to the request before passing it to the handler,
 documentation][doc].
 
 <a name='routed-middleware'></a>
-__`(routed-middleware handler middleware-key wrap-fn [options])`__
+__`(routed-middleware handler middleware-key wrap-fn & args)`__
 
-This middleware will route requests either to the plain `handler` or to
-`(wrap-fn handler)`, depending on request metadata provided by the
-[`RouteDescriptor`](#route-descriptors). In particular, you can enable
-middlewares per-route using `enable-middlewares` and `disable-middlewares`:
+This middleware (and its brother `active-routed-middleware`) will route requests
+either to the plain `handler` or to `(wrap-fn handler)`, depending on request
+metadata provided by the [`RouteDescriptor`](#route-descriptors). In particular,
+you can enable middlewares per-route using `enable-middlewares` and
+`disable-middlewares`:
 
 ```clojure
 (def routes'
@@ -131,8 +132,8 @@ Middlewares are then instantiated using e.g.:
 ```clojure
 (def app
   (-> handler
-      (r/routed-middleware :tracking wrap-tracking {:enabled? true})
-      (r/routed-middleware :json     wrap-json)
+      (r/active-routed-middleware :tracking wrap-tracking)
+      (r/routed-middleware        :json     wrap-json)
       (r/wrap-routing routes')))
 ```
 
