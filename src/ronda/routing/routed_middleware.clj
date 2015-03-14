@@ -9,13 +9,17 @@
 (defn- conj-disj-middleware
   "Update middleware metadata, conjing the given value to `conj-key` and disjing
    it from `disj-key`."
-  [descriptor route-id conj-key disj-key k]
-  (describe/update-metadata
-    descriptor
-    route-id
-    #(-> %
-         (update-in [:middlewares conj-key] (fnil conj #{}) k)
-         (update-in [:middlewares disj-key] (fnil disj #{}) k))))
+  [descriptor route-id conj-key disj-key middleware-spec]
+  (let [[k v] (if (sequential? middleware-spec)
+                middleware-spec
+                [middleware-spec nil])]
+    (describe/update-metadata
+      descriptor
+      route-id
+      #(-> %
+           (cond-> (some? v) (assoc k v))
+           (update-in [:middlewares conj-key] (fnil conj #{}) k)
+           (update-in [:middlewares disj-key] (fnil disj #{}) k)))))
 
 (defn- conj-disj-all
   "Update middleware metadata, conjing the given values to `conj-key` and

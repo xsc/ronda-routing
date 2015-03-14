@@ -1,18 +1,17 @@
 (ns ronda.routing.meta-middleware-test
   (:require [midje.sweet :refer :all]
             [ronda.routing
-             [descriptor :as describe]
              [simple :as simple]
              [middleware :refer [wrap-routing]]
-             [meta-middleware :as m]]))
+             [meta-middleware :as m]
+             [routed-middleware :refer [enable-middlewares]]]))
 
 (let [d (-> (simple/descriptor
               {:a "/a"
                :b "/b"})
-            (describe/assoc-metadata
-              :a :m {:v "hello"})
-            (describe/assoc-metadata
-              :b :m {:v "bye"}))
+            (enable-middlewares
+              :a {:m {:v "hello"}}
+              :b {:m {:v "bye"}}))
       h (constantly {:status 200})]
   (tabular
     (let [m (fn [handler _ {:keys [v]}]
