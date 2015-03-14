@@ -1,4 +1,4 @@
-(ns ^:no-doc ronda.routing.routed-middleware
+(ns ronda.routing.routed-middleware
   (:require [ronda.routing
              [descriptor :as describe]
              [middleware :as m]

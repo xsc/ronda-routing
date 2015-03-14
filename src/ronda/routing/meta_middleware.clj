@@ -1,4 +1,4 @@
-(ns ^:no-doc ronda.routing.meta-middleware
+(ns ronda.routing.meta-middleware
   (:require [ronda.routing
              [request :as r]
              [middleware-data :as md]]))
