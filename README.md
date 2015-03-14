@@ -5,8 +5,9 @@ a middleware-based approach to routing, allowing you to do several things:
 
 - [decouple your routing logic](#wrap-routing) from your handlers,
 - thus, [choose the routing library](#implementations) most suited to your requirements,
-- use [conditional middlewares](#conditional-middleware) or middlewares that get
-  [triggered by route metadata](#routed-middleware),
+- use [conditional middlewares](#conditional-middleware), middlewares that get
+  [triggered by route metadata](#routed-middleware) or even [configured by
+  it](#meta-middleware),
 - [generate and parse references](#path-matching--generation) to other parts of your application from
   within a handler and without global state.
 
@@ -138,6 +139,51 @@ Middlewares are then instantiated using e.g.:
 ```
 
 An `active-routed-middleware` will be applied unless explicitly disabled.
+
+<a name='meta-middleware'></a>
+__`(meta-middleware handler middleware-key wrap-fn)`__
+
+Handlers will be dynamically created using `(wrap-fn handler route-id
+route-metadata)` and memoized. This means that their behaviour can be adjusted
+on a per-endpoint basis, e.g. a simple cache middleware:
+
+```clojure
+(defn wrap-cache*
+  [handler route-id {:keys [max-age]}]
+  (let [v (format "max-age=%d" max-age)]
+    (fn [request]
+      (assoc-in
+        (handler request)
+        [:headers "cache-control"]
+        v))))
+
+(defn wrap-cache
+  [handler]
+  (r/meta-middleware handler :cache wrap-cache*))
+```
+
+Which can be activated by simply attaching `:cache` metadata to a route:
+
+```clojure
+(def routes
+  (-> (bidi/descriptor ["/" {"a" :a, "b" :b}])
+      (r/assoc-metadata :a :cache {:max-age 300})))
+
+(def app
+  (-> (constantly {:status 200})
+      (wrap-cache)
+      (r/wrap-routing routes)))
+```
+
+The `"cache-control"` header will be set for `:a` but not `:b`:
+
+```clojure
+(app {:request-method :get, :uri "/a"})
+;; => {:headers {"cache-control" "max-age=300"}, :status 200}
+
+(app {:request-method :get, :uri "/b"})
+;; => {:status 200}
+```
 
 ### Path Matching &amp; Generation
 
