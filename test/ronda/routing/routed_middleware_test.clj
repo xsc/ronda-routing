@@ -3,6 +3,7 @@
             [ronda.routing
              [simple :as simple]
              [middleware :refer [wrap-routing]]
+             [middleware-data :as md]
              [routed-middleware :as m]]))
 
 (let [d (-> (simple/descriptor
@@ -10,8 +11,8 @@
                :b "/disable"
                :c "/default"
                :d "/enable2"})
-            (m/enable-middlewares  :a [:m] :d [:m])
-            (m/disable-middlewares :b [:m]))
+            (md/enable-middlewares  :a [:m] :d [:m])
+            (md/disable-middlewares :b [:m]))
       m #(fn [request]
            (% (assoc request :middleware true)))
       h (fn [request]

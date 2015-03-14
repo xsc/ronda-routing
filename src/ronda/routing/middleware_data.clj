@@ -1,0 +1,69 @@
+(ns ^:no-doc ronda.routing.middleware-data
+  (:require [ronda.routing
+             [descriptor :as describe]
+             [request :as r]]))
+
+(defn- conj-disj-middleware
+  "Update middleware metadata, conjing the given value to `conj-key` and disjing
+   it from `disj-key`."
+  [descriptor route-id conj-key disj-key middleware-spec]
+  (let [[k v] (if (sequential? middleware-spec)
+                middleware-spec
+                [middleware-spec nil])]
+    (describe/update-metadata
+      descriptor
+      route-id
+      #(-> %
+           (cond-> (some? v) (assoc k v))
+           (update-in [:middlewares conj-key] (fnil conj #{}) k)
+           (update-in [:middlewares disj-key] (fnil disj #{}) k)))))
+
+(defn- conj-disj-all
+  "Update middleware metadata, conjing the given values to `conj-key` and
+   disjing them from `disj-key` "
+  [descriptor conj-key disj-key [route-id ks]]
+  (reduce
+    #(conj-disj-middleware %1 route-id conj-key disj-key %2)
+    descriptor ks))
+
+(defn- pairs-of
+  "Create a seq of pairs, starting with `[a b]`."
+  [a b vs]
+  (cons [a b] (partition 2 vs)))
+
+(defn enable-middlewares
+  "Enable the given middlewares for the endpoint identified by the given
+   route ID/middleware key pairs."
+  [descriptor route-id ks & more]
+  (reduce
+    #(conj-disj-all % ::enable ::disable %2)
+    descriptor
+    (pairs-of route-id ks more)))
+
+(defn disable-middlewares
+  "Disable the given middlewares for the endpoint identified by the given
+   route ID/middleware key pairs."
+  [descriptor route-id ks & more]
+  (reduce
+    #(conj-disj-all % ::disable ::enable %2)
+    descriptor
+    (pairs-of route-id ks more)))
+
+(defn- contains-middleware?
+  "Check whether the middleware metadata at the given `k` contains the given
+   middleware key value."
+  [request k middleware-key]
+  (some-> request
+          r/routing-data
+          (get-in [:meta :middlewares k])
+          (contains? middleware-key)))
+
+(defn middleware-enabled?
+  "Check whether a middleware is active."
+  [request middleware-key]
+  (contains-middleware? request ::enable middleware-key))
+
+(defn middleware-disabled?
+  "Check whether a middleware is inactive."
+  [request middleware-key]
+  (contains-middleware? request ::disable middleware-key))

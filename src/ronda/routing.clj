@@ -5,6 +5,7 @@
              meta-middleware
              routed-middleware
              middleware
+             middleware-data
              prefix
              request]))
 
@@ -27,12 +28,13 @@
    conditional-transform
    endpoint-middleware
    endpoint-transform]
+  [ronda.routing.middleware-data
+   enable-middlewares
+   disable-middlewares]
   [ronda.routing.meta-middleware
    meta-middleware]
   [ronda.routing.routed-middleware
    active-routed-middleware
-   enable-middlewares
-   disable-middlewares
    routed-middleware]
   [ronda.routing.prefix
    prefix]
