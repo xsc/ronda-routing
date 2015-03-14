@@ -162,12 +162,13 @@ on a per-endpoint basis, e.g. a simple cache middleware:
   (r/meta-middleware handler :cache wrap-cache*))
 ```
 
-Which can be activated by simply attaching `:cache` metadata to a route:
+Which can be activated by simply attaching `:cache` metadata to a route, e.g.
+using the map-consuming variant of `enable-middlewares`:
 
 ```clojure
 (def routes
   (-> (bidi/descriptor ["/" {"a" :a, "b" :b}])
-      (r/assoc-metadata :a :cache {:max-age 300})))
+      (r/enable-middlewares :a {:cache {:max-age 300}})))
 
 (def app
   (-> (constantly {:status 200})
