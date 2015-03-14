@@ -2,6 +2,7 @@
   (:require [potemkin :refer [import-vars]]
             [ronda.routing
              descriptor
+             meta-middleware
              routed-middleware
              middleware
              prefix
@@ -26,6 +27,8 @@
    conditional-transform
    endpoint-middleware
    endpoint-transform]
+  [ronda.routing.meta-middleware
+   meta-middleware]
   [ronda.routing.routed-middleware
    active-routed-middleware
    enable-middlewares
