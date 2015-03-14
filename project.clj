@@ -1,4 +1,4 @@
-(defproject ronda/routing "0.2.2"
+(defproject ronda/routing "0.2.3-SNAPSHOT"
   :description "Middleware-based Routing Logic."
   :url "https://github.com/xsc/ronda-routing"
   :license {:name "Eclipse Public License"
