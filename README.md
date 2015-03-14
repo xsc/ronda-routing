@@ -185,12 +185,8 @@ The `"cache-control"` header will be set for `:a` but not `:b`:
 ;; => {:status 200}
 ```
 
-Since `middleware-key` can be any function, you can supply a default value by
-simply wrapping the lookup:
-
-```clojure
-(r/meta-middleware handler #(:cache % {:max-age 3000}) wrap-cache*)
-```
+`wrap-fn` can be called with `nil` metadata (if the middleware was activated but
+no data attached), so you should prepare default values for that case.
 
 ### Path Matching &amp; Generation
 
