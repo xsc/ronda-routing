@@ -162,8 +162,7 @@ on a per-endpoint basis, e.g. a simple cache middleware:
   (r/meta-middleware handler :cache wrap-cache*))
 ```
 
-Which can be activated by simply attaching `:cache` metadata to a route, e.g.
-using the map-consuming variant of `enable-middlewares`:
+Activation is similar to `routed-middleware`:
 
 ```clojure
 (def routes
