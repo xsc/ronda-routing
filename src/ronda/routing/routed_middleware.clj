@@ -39,7 +39,7 @@
    route ID/middleware key pairs."
   [descriptor route-id ks & more]
   (reduce
-    #(conj-disj-all % :enable :disable %2)
+    #(conj-disj-all % ::enable ::disable %2)
     descriptor
     (pairs-of route-id ks more)))
 
@@ -48,7 +48,7 @@
    route ID/middleware key pairs."
   [descriptor route-id ks & more]
   (reduce
-    #(conj-disj-all % :disable :enable %2)
+    #(conj-disj-all % ::disable ::enable %2)
     descriptor
     (pairs-of route-id ks more)))
 
@@ -71,8 +71,8 @@
    "
   [middleware-key enabled?]
   (if enabled?
-    #(not (contains-middleware? % :disable middleware-key))
-    #(contains-middleware? % :enable middleware-key)))
+    #(not (contains-middleware? % ::disable middleware-key))
+    #(contains-middleware? % ::enable middleware-key)))
 
 (defn- mk-middleware
   [handler middleware-key enabled? wrap-fn args]
