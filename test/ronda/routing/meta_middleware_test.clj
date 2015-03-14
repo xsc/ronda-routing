@@ -4,12 +4,12 @@
              [simple :as simple]
              [middleware :refer [wrap-routing]]
              [meta-middleware :as m]
-             [routed-middleware :refer [enable-middlewares]]]))
+             [middleware-data :as md]]))
 
 (let [d (-> (simple/descriptor
               {:a "/a"
                :b "/b"})
-            (enable-middlewares
+            (md/enable-middlewares
               :a {:m {:v "hello"}}
               :b {:m {:v "bye"}}))
       h (constantly {:status 200})]

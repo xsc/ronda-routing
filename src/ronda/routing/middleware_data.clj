@@ -14,7 +14,7 @@
       descriptor
       route-id
       #(-> %
-           (cond-> (some? v) (assoc k v))
+           (cond-> (some? v) (assoc-in [:middlewares k] v))
            (update-in [:middlewares conj-key] (fnil conj #{}) k)
            (update-in [:middlewares disj-key] (fnil disj #{}) k)))))
 
@@ -67,3 +67,10 @@
   "Check whether a middleware is inactive."
   [request middleware-key]
   (contains-middleware? request ::disable middleware-key))
+
+(defn middleware-data
+  "Get middleware data attached by `enable-middlewares`."
+  [request middleware-key]
+  (some-> request
+          r/routing-data
+          (get-in [:meta :middlewares middleware-key])))
