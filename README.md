@@ -17,8 +17,6 @@ This isn't yet another routing/matching library. I promise.
 
 ## Usage
 
-Don't. But if you insist:
-
 __Leiningen__ ([via Clojars](https://clojars.org/ronda/routing))
 
 [![Clojars Project](http://clojars.org/ronda/routing/latest-version.svg)](http://clojars.org/ronda/routing)
