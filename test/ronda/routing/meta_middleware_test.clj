@@ -25,4 +25,20 @@
     ?uri    ?body
     "/a"    "hello"
     "/b"    "bye"
-    "/c"    nil))
+    "/c"    nil)
+  (fact "about memoization"
+        (let [calls (atom 0)
+              m (fn [handler _ _]
+                  (swap! calls inc)
+                  handler)
+              h' (-> h
+                     (m/meta-middleware :m m)
+                     (wrap-routing d))]
+          (h' {:request-method :get, :uri "/a"}) => {:status 200}
+          (h' {:request-method :get, :uri "/a"}) => {:status 200}
+          @calls => 1
+          (h' {:request-method :get, :uri "/b"}) => {:status 200}
+          (h' {:request-method :get, :uri "/b"}) => {:status 200}
+          @calls => 2
+          (h' {:request-method :get, :uri "/"}) => {:status 200}
+          @calls => 2)))
