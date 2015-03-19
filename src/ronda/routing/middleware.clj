@@ -8,16 +8,26 @@
    RouteDescriptor. If a route can be found for a request the descriptor,
    route params and endpoint ID are injected into the request map which is then
    passed to the original handler. If no route can be found, the request is passed
-   to the handler unaltered."
-  [handler descriptor]
+   to the handler unaltered.
+
+   If `:response?` is set to `true` in the optional options map, routing
+   metadata and descriptor is attached to the response, as well."
+  [handler descriptor
+   & [{:keys [response?]
+       :or {response? false}}]]
   (fn [request]
     (let [request' (r/set-descriptor request descriptor)]
       (if-let [{:keys [route-params] :as data} (describe/match-request descriptor request)]
-        (-> request'
-            (update-in [:route-params] (fnil merge {}) route-params)
-            (update-in [:params] (fnil merge {}) route-params)
-            (r/set-routing-data data)
-            (handler))
+        (if-let [r (-> request'
+                       (update-in [:route-params] (fnil merge {}) route-params)
+                       (update-in [:params] (fnil merge {}) route-params)
+                       (r/set-routing-data data)
+                       (handler))]
+          (if response?
+            (-> r
+                (r/set-descriptor descriptor)
+                (r/set-routing-data data))
+            r))
         (handler request')))))
 
 (defn wrap-endpoints

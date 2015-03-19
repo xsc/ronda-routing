@@ -32,6 +32,19 @@
         (rq/endpoint request) => :greet
         (rq/descriptor request) => test-descriptor))
 
+(fact "about the abstract routing middleware with response metadata."
+      (let [a (atom nil)
+            h (wrap-routing
+                (constantly {:status 200})
+                test-descriptor
+                {:response? true})
+            r (h {:request-method :get
+                  :uri "/hello/world"})
+            {:keys [request-method uri] :as request} @a]
+        (:status r) => 200
+        (rq/descriptor r) => test-descriptor
+        (rq/endpoint r) => :greet))
+
 (let [h (-> (constantly {:status 404})
             (wrap-endpoints handlers)
             (wrap-routing test-descriptor))]
