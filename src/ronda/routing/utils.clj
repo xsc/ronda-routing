@@ -10,9 +10,10 @@
 
 (defn stringify-vals
   [m]
-  (->> (for [[k v] m]
-         [k (->str v)])
-       (into {})))
+  (reduce
+    (fn [m e]
+      (assoc m (key e) (->str (val e))))
+    m m))
 
 (defn urlencode
   [v]
