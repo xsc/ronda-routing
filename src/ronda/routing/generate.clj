@@ -35,20 +35,16 @@
   clojure.lang.Keyword
   (generate-by* [k values]
     (read-keyword values k nil))
-  (generate-by [k values]
-    (generate-by* k values))
 
   clojure.lang.IPersistentVector
   (generate-by* [v values]
     (read-keyword values (second v) (first v)))
   (generate-by [path values]
     (let [vs (u/stringify-vals values)]
-      (if (sequential? path)
-        (reduce
-          (fn [s e]
-            (str s (generate-by* e vs)))
-          "" path)
-        (generate-by* path vs))))
+      (reduce
+        (fn [s e]
+          (str s (generate-by* e vs)))
+        "" path)))
 
   clojure.lang.Sequential
   (generate-by [this values]
