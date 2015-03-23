@@ -1,8 +1,7 @@
 (defproject ronda/routing "0.2.4-SNAPSHOT"
   :description "Middleware-based Routing Logic."
   :url "https://github.com/xsc/ronda-routing"
-  :license {:name "Eclipse Public License"
-            :url "http://www.eclipse.org/legal/epl-v10.html"}
+  :license {:name "MIT License"}
   :dependencies [[org.clojure/clojure "1.7.0-alpha5"]
                  [potemkin "0.3.12"]]
   :profiles {:dev {:dependencies [[midje "1.6.3"]
