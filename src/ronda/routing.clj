@@ -40,6 +40,7 @@
    prefix]
   [ronda.routing.request
    routing-data
+   descriptor
    endpoint
    href
    match
