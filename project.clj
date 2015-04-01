@@ -5,7 +5,8 @@
             :url "http://xsc.mit-license.org"}
   :dependencies [[org.clojure/clojure "1.7.0-alpha6"]
                  [potemkin "0.3.13"]]
-  :profiles {:dev {:dependencies [[midje "1.6.3"]
+  :profiles {:dev {:dependencies [[midje "1.7.0-SNAPSHOT"]
+                                  [org.clojure/math.combinatorics "0.1.1"]
                                   [joda-time "2.7"]]
                    :plugins [[lein-midje "3.1.3"]
                              [codox "0.8.10"]]
