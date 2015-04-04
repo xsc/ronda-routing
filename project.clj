@@ -1,4 +1,4 @@
-(defproject ronda/routing "0.2.5"
+(defproject ronda/routing "0.2.6-SNAPSHOT"
   :description "Middleware-based Routing Logic."
   :url "https://github.com/xsc/ronda-routing"
   :license {:name "MIT License"
