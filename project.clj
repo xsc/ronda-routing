@@ -3,7 +3,7 @@
   :url "https://github.com/xsc/ronda-routing"
   :license {:name "MIT License"
             :url "http://xsc.mit-license.org"}
-  :dependencies [[org.clojure/clojure "1.7.0-alpha6"]
+  :dependencies [[org.clojure/clojure "1.7.0-beta1"]
                  [potemkin "0.3.13"]]
   :profiles {:dev {:dependencies [[midje "1.7.0-SNAPSHOT"]
                                   [org.clojure/math.combinatorics "0.1.1"]
