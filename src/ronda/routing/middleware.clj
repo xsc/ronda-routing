@@ -49,7 +49,7 @@
    endpoint ID determined by `wrap-routing`, delegating them to the given
    handler."
   [default-handler endpoint-id handler]
-  (wrap-endpoint default-handler {endpoint-id handler}))
+  (wrap-endpoints default-handler {endpoint-id handler}))
 
 (defn compile-endpoints
   "Create a Ring handler that intercepts all requests that had an endpoint ID
