@@ -49,7 +49,7 @@
     descriptor
     (pairs-of route-id ks more)))
 
-(defn route-contains-middleware?
+(defn- route-contains-middleware?
   "Check the raw route data on whether a middleware is contained in the set
    at the given `k`."
   [routing-data k middleware-key]
@@ -57,12 +57,12 @@
       (get-in [:meta :middlewares k])
       (contains? middleware-key)))
 
-(defn route-middleware-enabled?
+(defn ^{:added "0.2.7"} route-middleware-enabled?
   "Check the raw route data on whether a middleware is enabled."
   [routing-data middleware-key]
   (route-contains-middleware? routing-data ::enable middleware-key))
 
-(defn route-middleware-disabled?
+(defn ^{:added "0.2.7"} route-middleware-disabled?
   "Check the raw route data on whether a middleware is disabled."
   [routing-data middleware-key]
   (route-contains-middleware? routing-data ::disable middleware-key))
@@ -92,7 +92,7 @@
           r/routing-data
           (get-in [:meta :middlewares middleware-key])))
 
-(defn route-middleware-data
+(defn ^{:added "0.2.7"} route-middleware-data
   "Get middleware data from the raw route data."
   [routing-data middleware-key]
   (get-in routing-data [:meta :middlewares middleware-key]))
