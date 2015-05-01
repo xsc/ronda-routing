@@ -9,7 +9,7 @@
                                   [org.clojure/math.combinatorics "0.1.1"]
                                   [joda-time "2.7"]]
                    :plugins [[lein-midje "3.1.3"]
-                             [codox "0.8.10"]]
+                             [codox "0.8.11"]]
                    :codox {:project {:name "ronda/routing"}
                            :src-dir-uri "https://github.com/xsc/ronda-routing/blob/master/"
                            :src-linenum-anchor-prefix "L"
