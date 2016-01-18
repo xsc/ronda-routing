@@ -3,11 +3,11 @@
   :url "https://github.com/xsc/ronda-routing"
   :license {:name "MIT License"
             :url "http://xsc.mit-license.org"}
-  :dependencies [[org.clojure/clojure "1.7.0-beta3"]
-                 [potemkin "0.3.13"]]
-  :profiles {:dev {:dependencies [[midje "1.7.0-SNAPSHOT"]
+  :dependencies [[org.clojure/clojure "1.7.0"]
+                 [potemkin "0.4.3"]]
+  :profiles {:dev {:dependencies [[midje "1.8.3"]
                                   [org.clojure/math.combinatorics "0.1.1"]
-                                  [joda-time "2.7"]]
+                                  [joda-time "2.9.1"]]
                    :plugins [[lein-midje "3.1.3"]
                              [codox "0.8.11"]]
                    :codox {:project {:name "ronda/routing"}
